@@ -488,7 +488,7 @@
     }
   </style>
 </head>
-<body data-checkout-url="#" data-exit-url="about:blank">
+<body data-checkout-url="https://ggcheckout.app/checkout/v2/ppg9HwtoWZPC3dMdPr6y" data-exit-url="about:blank">
   <main class="page" aria-labelledby="headline">
     <div class="shell">
       <section class="copy" aria-label="Oferta de saída BASE EF Completo">
@@ -518,7 +518,7 @@
         </div>
 
         <div class="actions">
-          <!-- Troque data-checkout-url pelo checkout real e data-exit-url pelo destino de saída, se houver. -->
+          <!-- data-checkout-url aponta para o checkout real; data-exit-url define o destino de saída. -->
           <a class="primary-cta" id="acceptOffer" href="#">Sim, quero o BASE EF Completo por R$14,90</a>
           <a class="secondary-cta" id="leavePage" href="#">Prefiro sair e continuar tentando juntar tudo sozinho</a>
           <p class="microcopy">Essa oferta só aparece agora, enquanto você ainda está nesta página.</p>
@@ -582,8 +582,18 @@
     const acceptOffer = document.getElementById("acceptOffer");
     const leavePage = document.getElementById("leavePage");
 
+    function withCurrentQuery(url) {
+      const currentQuery = window.location.search.replace("?", "").trim();
+
+      if (!url || url === "#" || !currentQuery) {
+        return url;
+      }
+
+      return url.trim() + (url.includes("?") ? "&" : "?") + currentQuery;
+    }
+
     if (checkoutUrl && checkoutUrl !== "#") {
-      acceptOffer.href = checkoutUrl;
+      acceptOffer.href = withCurrentQuery(checkoutUrl);
     }
 
     if (exitUrl && exitUrl !== "#") {
@@ -598,7 +608,7 @@
         return;
       }
 
-      acceptOffer.href = checkoutUrl;
+      acceptOffer.href = withCurrentQuery(checkoutUrl);
     });
 
     leavePage.addEventListener("click", (event) => {
